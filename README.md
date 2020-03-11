@@ -5,7 +5,7 @@ Includes and Libraries and copy the relvant .dll files either in System32 or in 
 
 Deps: 
 - glm
-- nglfw
+- glfw
 - vulcanSDK
 
 Built on Visual Studio 2017
