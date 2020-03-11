@@ -9,13 +9,6 @@ Demo Entrypoint for the vulcan test App
 //#include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 
-// Vulkan Error Checking wrapper
-#define CHECK_VK(func)													\
-  if (VK_SUCCESS != (func)) {											\
-      std::cout << std::endl << "Error -->" << func << std::endl;						\
-	  std::exit(-1);													\
-  }		
-
 #include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
@@ -74,7 +67,6 @@ bool initVulcan()
 int main()
 {
 	std::cout << "Vulcan Test App for windows \n";
-
 	Renderer r;
 
 	try {
@@ -84,7 +76,6 @@ int main()
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 	}
-
 	return EXIT_SUCCESS;
 
 	return 0;
