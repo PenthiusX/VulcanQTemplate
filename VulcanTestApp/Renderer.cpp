@@ -13,7 +13,7 @@ Renderer::~Renderer(){
 void Renderer::run()
 {
 	initWindow(1024, 768);
-	vulcanInstance->start();
+	vulcanInstance->startInstance();
 	mainLoop();
 	cleanUp();
 }
@@ -36,6 +36,7 @@ void Renderer::initWindow(int width, int height) {
 
 void Renderer::cleanUp()
 {
+	vulcanInstance->destroyInstance();
 	glfwDestroyWindow(this->renderWindow);
 	glfwTerminate();
 }

@@ -17,12 +17,15 @@ public:
 	VulcanInstance();
 	~VulcanInstance();
 
-	void start();
+	void startInstance();
+	void destroyInstance();
 
 private:
 	void initVulkan();
 	void createInstance();
-	void destroyInstance();
+
+
+	void checkExtensionSupport();
 
 	VkInstance instance;
 
