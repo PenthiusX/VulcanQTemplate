@@ -20,16 +20,13 @@ public:
 	void run();
 
 private:
-	void initVulcan();
-
 	void initWindow(int width, int height);
 	void mainLoop();
 	void cleanUp();
 
 	//vars 
-
 	GLFWwindow *renderWindow;
-
+	VulcanInstance *vulcanInstance;
 };
 
 

@@ -1,20 +1,21 @@
 #include "Renderer.h"
 
 
-Renderer::Renderer(){}
-Renderer::~Renderer(){}
+Renderer::Renderer(){
+	vulcanInstance = new VulcanInstance();
+}
+
+Renderer::~Renderer(){
+	delete renderWindow;
+	delete vulcanInstance;
+}
 
 void Renderer::run()
 {
 	initWindow(1024, 768);
-	initVulcan();
+	vulcanInstance->start();
 	mainLoop();
 	cleanUp();
-}
-
-void Renderer::initVulcan()
-{
-
 }
 
 void Renderer::mainLoop()

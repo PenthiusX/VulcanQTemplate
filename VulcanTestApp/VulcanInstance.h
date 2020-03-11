@@ -2,11 +2,12 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <iostream>
 
 // Vulkan Error Checking wrapper
 #define CHECK_VK(func)													\
   if (VK_SUCCESS != (func)) {											\
-      std::cout << std::endl << "Error -->" << func << std::endl;						\
+      throw std::runtime_error("failed to create instance!");						\
 	  std::exit(-1);													\
   }		
 
@@ -16,13 +17,18 @@ public:
 	VulcanInstance();
 	~VulcanInstance();
 
+	void start();
 
 private:
 	void initVulkan();
 	void createInstance();
+	void destroyInstance();
+
+	VkInstance instance;
 
 	VkApplicationInfo appInfo;
 	VkInstanceCreateInfo createInfo;
-
+	uint32_t glfwExtensionCount;
+	const char** glfwExtensions;
 };
 
