@@ -23,17 +23,18 @@ public:
 
 private:
 	void initVulkan();
+	void createValidationMechanism();
 	void createInstance();
 
 	void checkExtensionSupport();
 	bool checkValidationLayerSupport();
+	std::vector<const char*> getRequiredExtensions();
 
 	VkInstance instance;
 	VkApplicationInfo appInfo;
 	VkInstanceCreateInfo createInfo;
 	uint32_t glfwExtensionCount;
 	const char** glfwExtensions;
-
 
 
 

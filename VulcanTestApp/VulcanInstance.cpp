@@ -1,27 +1,40 @@
 #include "VulcanInstance.h"
 #include <GLFW/glfw3.h>
 
-VulcanInstance::VulcanInstance(){
 
+static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+	VkDebugUtilsMessageTypeFlagsEXT messageType,
+	const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+	void* pUserData)
+{
+	std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
+	return VK_FALSE;
 }
-VulcanInstance::~VulcanInstance(){
 
-}
 
-void VulcanInstance::startInstance(){
-	createInstance();
-}
 
-void VulcanInstance::createInstance(){
+//------------------------
+VulcanInstance::VulcanInstance(){}
+VulcanInstance::~VulcanInstance(){}
+//-----------------------
 
-	if (enableValidationLayers && !checkValidationLayerSupport()){throw std::runtime_error("Validation layers requested, but not available!");}
-	else if (enableValidationLayers && checkValidationLayerSupport()){std::cout << "Validation layers requested, and are available!" << std::endl;}
-	
-	checkExtensionSupport();
+void VulcanInstance::startInstance() {
+	createValidationMechanism();
 	initVulkan();
 }
 
+void VulcanInstance::createValidationMechanism()
+{
+	if (enableValidationLayers && !checkValidationLayerSupport()) { throw std::runtime_error("Validation layers requested, but not available!"); }
+	else if (enableValidationLayers && checkValidationLayerSupport()) { std::cout << "Validation layers requested, and are available!" << std::endl; }
+	checkExtensionSupport();
+}
+
 void VulcanInstance::initVulkan(){
+	createInstance();
+}
+
+void VulcanInstance::createInstance() {
 
 	appInfo = {};
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -35,16 +48,35 @@ void VulcanInstance::initVulkan(){
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	createInfo.pApplicationInfo = &appInfo;
 
-	//-------
+	//setting extensions
 	glfwExtensionCount = 0;
 	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
 	createInfo.enabledExtensionCount = glfwExtensionCount;
 	createInfo.ppEnabledExtensionNames = glfwExtensions;
-	createInfo.enabledLayerCount = 0;
+
+	//Validation Layers
+	if (enableValidationLayers) {
+		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		createInfo.ppEnabledLayerNames = validationLayers.data();
+	}
+	else {
+		createInfo.enabledLayerCount = 0;
+	}
+
+	auto extensions = getRequiredExtensions();
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+	createInfo.ppEnabledExtensionNames = extensions.data();
 
 	CHECK_VK(vkCreateInstance(&createInfo, nullptr, &instance));
 }
+
+
+void VulcanInstance::destroyInstance() {
+
+	vkDestroyInstance(instance, nullptr);
+}
+
+
 
 //Check for all extensions support for the current hardware 
 void VulcanInstance::checkExtensionSupport()
@@ -61,14 +93,20 @@ void VulcanInstance::checkExtensionSupport()
 	}
 }
 
-void VulcanInstance::destroyInstance(){
+std::vector<const char*> VulcanInstance::getRequiredExtensions() {
+	uint32_t glfwExtensionCount = 0;
+	const char** glfwExtensions;
+	glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-	//if (enableValidationLayers) {
-	//	DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
-	//}
+	std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
-	vkDestroyInstance(instance, nullptr);
+	if (enableValidationLayers) {
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	}
+
+	return extensions;
 }
+
 
 bool VulcanInstance::checkValidationLayerSupport(){
 	uint32_t layerCount;
