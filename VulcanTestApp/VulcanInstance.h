@@ -25,6 +25,7 @@ private:
 	void initVulkan();
 	void createValidationMechanism();
 	void createInstance();
+	void pickPhysicalDevice();
 
 	void checkExtensionSupport();
 	bool checkValidationLayerSupport();

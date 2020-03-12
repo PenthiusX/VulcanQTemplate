@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 
+//Private local Functions---------
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 	VkDebugUtilsMessageTypeFlagsEXT messageType,
 	const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -11,7 +12,15 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityF
 	return VK_FALSE;
 }
 
+bool isDeviceSuitable(VkPhysicalDevice device){
 
+	VkPhysicalDeviceProperties deviceProperties;
+	VkPhysicalDeviceFeatures deviceFeatures;
+	vkGetPhysicalDeviceProperties(device, &deviceProperties);
+	vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+	return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && deviceFeatures.geometryShader;
+}
 
 //------------------------
 VulcanInstance::VulcanInstance(){}
@@ -30,11 +39,16 @@ void VulcanInstance::createValidationMechanism()
 	checkExtensionSupport();
 }
 
+//===========================================================================================
+//===========================================================================================
+//===========================================================================================
+
 void VulcanInstance::initVulkan(){
 	createInstance();
+	pickPhysicalDevice();
 }
 
-void VulcanInstance::createInstance() {
+void VulcanInstance::createInstance(){
 
 	appInfo = {};
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -70,12 +84,38 @@ void VulcanInstance::createInstance() {
 	CHECK_VK(vkCreateInstance(&createInfo, nullptr, &instance));
 }
 
+void VulcanInstance::pickPhysicalDevice()
+{
+	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
+	uint32_t deviceCount = 0;
+	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
-void VulcanInstance::destroyInstance() {
+	if (deviceCount == 0) {throw std::runtime_error("failed to find GPUs with Vulkan support!");}
 
+	std::vector<VkPhysicalDevice> devices(deviceCount);
+	vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+	for (const auto& device : devices) {
+		if (isDeviceSuitable(device)) {
+			physicalDevice = device;
+			break;
+		}
+	}
+
+	if (physicalDevice == VK_NULL_HANDLE) {
+		throw std::runtime_error("failed to find a suitable GPU!");
+	}
+
+}
+
+
+void VulcanInstance::destroyInstance(){
 	vkDestroyInstance(instance, nullptr);
 }
 
+//===========================================================================================
+//===========================================================================================
+//===========================================================================================
 
 
 //Check for all extensions support for the current hardware 
