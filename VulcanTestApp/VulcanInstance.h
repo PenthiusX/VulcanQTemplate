@@ -11,6 +11,7 @@
 	  std::exit(-1);													\
   }		
 
+
 class VulcanInstance
 {
 public:
@@ -24,14 +25,25 @@ private:
 	void initVulkan();
 	void createInstance();
 
-
 	void checkExtensionSupport();
+	bool checkValidationLayerSupport();
 
 	VkInstance instance;
-
 	VkApplicationInfo appInfo;
 	VkInstanceCreateInfo createInfo;
 	uint32_t glfwExtensionCount;
 	const char** glfwExtensions;
+
+
+
+
+	//Validation enabled on Debug
+	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
+#ifdef NDEBUG
+	const bool enableValidationLayers = false;
+#else
+	const bool enableValidationLayers = true;
+#endif
+
 };
 

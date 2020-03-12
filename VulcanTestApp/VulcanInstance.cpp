@@ -2,17 +2,22 @@
 #include <GLFW/glfw3.h>
 
 VulcanInstance::VulcanInstance(){
-}
 
+}
 VulcanInstance::~VulcanInstance(){
+
 }
 
 void VulcanInstance::startInstance(){
 	createInstance();
-
 }
 
-void VulcanInstance::createInstance() {
+void VulcanInstance::createInstance(){
+
+	if (enableValidationLayers && !checkValidationLayerSupport()){throw std::runtime_error("Validation layers requested, but not available!");}
+	else if (enableValidationLayers && checkValidationLayerSupport()){std::cout << "Validation layers requested, and are available!" << std::endl;}
+	
+	checkExtensionSupport();
 	initVulkan();
 }
 
@@ -39,9 +44,6 @@ void VulcanInstance::initVulkan(){
 	createInfo.enabledLayerCount = 0;
 
 	CHECK_VK(vkCreateInstance(&createInfo, nullptr, &instance));
-	
-	//-------------
-	checkExtensionSupport();
 }
 
 //Check for all extensions support for the current hardware 
@@ -60,9 +62,32 @@ void VulcanInstance::checkExtensionSupport()
 }
 
 void VulcanInstance::destroyInstance(){
+
+	//if (enableValidationLayers) {
+	//	DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
+	//}
+
 	vkDestroyInstance(instance, nullptr);
 }
 
+bool VulcanInstance::checkValidationLayerSupport(){
+	uint32_t layerCount;
+	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
+	std::vector<VkLayerProperties> availableLayers(layerCount);
+	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
+	for (const char* layerName : validationLayers) {
+    bool layerFound = false;
 
+    for (const auto& layerProperties : availableLayers) {
+        if (strcmp(layerName, layerProperties.layerName) == 0) {
+            layerFound = true;
+            break;
+        }
+    }
+		if (!layerFound) {
+			return false;
+		}
+	}
+}
