@@ -282,7 +282,7 @@ private:
 	}
 
 	void createSurface() {
-		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {
+		if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS) {//points of divergence//windowing
 			throw std::runtime_error("failed to create window surface!");
 		}
 	}
@@ -477,7 +477,7 @@ private:
 	}
 
 	void createGraphicsPipeline() {
-		auto vertShaderCode = readFile("shaders/vert.spv");
+		auto vertShaderCode = readFile("shaders/vert.spv");//point of divergence//Shader compilation
 		auto fragShaderCode = readFile("shaders/frag.spv");
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
