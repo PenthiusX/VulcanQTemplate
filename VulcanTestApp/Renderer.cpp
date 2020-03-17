@@ -6,7 +6,7 @@ Renderer::Renderer(){
 }
 
 Renderer::~Renderer(){
-	delete renderWindow;
+	//delete renderWindow;
 	delete vulcanInstance;
 }
 
