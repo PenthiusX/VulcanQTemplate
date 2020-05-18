@@ -18,18 +18,21 @@
     <ClCompile Include="VulcanTestApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VulcanInstance.cpp">
+    <ClCompile Include="VulcanRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Renderer.h">
+    <ClInclude Include="VulcanRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VulcanInstance.h">
+    <ClInclude Include="17_vertex_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="18_vertex_buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="16_recreateSwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
