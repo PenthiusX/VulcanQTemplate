@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
@@ -40,13 +41,9 @@ class VulcanRenderer
 public:
 	VulcanRenderer();
 	~VulcanRenderer();
-
 	void run();
 
-
-
 private:
-
 	//Variables
 	GLFWwindow* window;
 
@@ -117,6 +114,5 @@ private:
 	QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 	std::vector<const char*> getRequiredExtensions();
 	std::vector<char> readFile(const std::string & filename);
-
 };
 

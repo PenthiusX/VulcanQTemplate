@@ -1,16 +1,13 @@
-
-
 #include <iostream>
 #include "17_vertex_input.h"
 //#include "recreateSwapChain.h"
-//#include "VulcanRenderer.h"
-
+//#include "VulcanRenderer.h"//need to compile shader 09
 
 
 
 int main() {
-	//VulcanRenderer app;
-	Vertex_input app;
+	//VulcanRenderer app;//need to compile shader 09
+	Vertex_input app;//need to compile shader 17
 
 	try {
 		app.run();
